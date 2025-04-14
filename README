@@ -1,0 +1,31 @@
+# AI-Powered Multi-Model Chat Application
+This is an API-based application built with **FastAPI** that facilitates conversations across multiple AI models, such as OpenAI's GPT, Google's Gemini, and DeepSeek. The platform allows users to start a conversation on a chosen topic, letting AI models take sequential turns to generate responses, simulating a multi-model discussion.
+## Features
+- **Multi-AI Model Integration**:
+    - Three AI models are used (GPT-4, Gemini, DeepSeek) to provide diverse perspectives in a conversation.
+    - Each model gives thoughtful, concise responses to the same topic.
+
+- **Simulation of AI Dialogues**:
+    - Models take consecutive turns to respond to a given topic.
+    - Up to 9 turns per session are supported, alternating between models.
+
+- **Background Processing**:
+    - Conversations are processed asynchronously using FastAPI's background tasks, ensuring efficient handling of requests.
+
+- **Logs and Storage**:
+    - Conversation data, including all messages, are logged and serialized for subsequent reviews or analysis.
+    - Optionally generates text files saving conversation details.
+
+## Prerequisites
+To run this project, ensure you have the following:
+1. **Environment Variables**:
+    - `OPENAI_API_KEY`: API key for OpenAI
+    - `GEMINI_API_KEY`: API key for Google's Gemini API
+    - `DEEPSEEK_API_KEY`: API key for DeepSeek services
+
+2. **Python 3.9+** installed on your system.
+3. Required Python libraries:
+    - `FastAPI`
+    - `pydantic`
+    - `google.generativeai` (Gemini API client)
+    - `openai`
