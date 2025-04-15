@@ -1,3 +1,5 @@
+
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, BackgroundTasks
 from pydantic import BaseModel
 import time
@@ -32,6 +34,13 @@ MAX_TOKENS_PER_MODEL = 256
 CONVO_TIMEOUT_SECONDS = 120
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or specify ["http://your-react-domain.com"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class StartConversationRequest(BaseModel):
     topic: str
