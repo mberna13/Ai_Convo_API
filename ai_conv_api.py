@@ -197,7 +197,7 @@ def ai_conversation(convo_id: str):
             elif sender == "DeepSeek":
                 reply = call_deepseek(last_response)
             else:
-                reply = "(Unknown model)"F
+                reply = "(Unknown model)"
 
             if not reply:
                 print(f"[{convo_id}] Warning: Empty reply from {sender}.")
