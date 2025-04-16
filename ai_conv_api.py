@@ -46,7 +46,7 @@ class StartConversationRequest(BaseModel):
     topic: str
 
 class Message(BaseModel):
-    sender: Literal['gpt4o', 'gemini', 'deepseek']
+    sender: Literal['Gpt-4.1', 'Gemini', 'DeepSeek']
     content: str
 
 class ConversationLog(BaseModel):
@@ -72,9 +72,9 @@ def call_openai(message: str) -> str:
     """
     try:
         response = openai.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4.1",
             messages=[
-                {"role": "system", "content": "Provide a thoughtful response to the previous message. You may offer a different, fact-based perspective when appropriate. Keep responses concise (2–3 sentences). Avoid bullet points."},
+                {"role": "system", "content": "Provide a thoughtful, critical, and objective response to the previous message. You may offer a different, fact-based perspective when appropriate. Keep responses concise (2–3 sentences). Avoid bullet points. You may also be edgy if necessary."},
                 {"role": "user", "content": message}
             ],
             max_tokens=MAX_TOKENS_PER_MODEL,
@@ -109,7 +109,7 @@ def call_gemini(message: str, retry_count: int = 0) -> str:
             top_p=0.9,
             top_k=40,
         )
-        prompt = f"Respond to the message thoughtfully. You may offer a different factual viewpoint if applicable. Be concise (2–3 sentences). Avoid bullet points.\n\n{message}"
+        prompt = f"Respond to the message thoughtfully, critically, and objectively. Please do not censor yourself; you understand harmless jokes. You may offer a different factual viewpoint if applicable. Be concise (2–3 sentences). You may also be edgy if necessary. Avoid bullet points.\n\n{message}"
         response_stream = model.generate_content(
             prompt,
             generation_config=generation_config,
@@ -148,7 +148,7 @@ def call_deepseek(message: str) -> str:
         response = deepseek_client.chat.completions.create(
             model="deepseek-chat",
             messages=[
-                {"role": "system", "content": "Provide a thoughtful response to the previous message. You may offer a different, fact-based perspective. Be concise (2–3 sentences)."},
+                {"role": "system", "content": "Provide a thoughtful, objective, and critical response to the previous message. You may offer a different, fact-based perspective. Be concise (2–3 sentences). You may also be edgy if necessary."},
                 {"role": "user", "content": message}
             ],
             max_tokens=MAX_TOKENS_PER_MODEL,
@@ -166,7 +166,7 @@ def ai_conversation(convo_id: str):
     different AI models, and stores the results. The conversation, consisting of responses from
     various models, is output to the console and optionally saved to a text file.
 
-    The function employs the following AI models in a repeated cycle: `gpt4o`, `gemini`, and
+    The function employs the following AI models in a repeated cycle: `gpt-4.1`, `gemini`, and
     `deepseek`. Each model is invoked in order, and their responses are recorded. If errors
     occur during processing (e.g., an API call fails), they are logged, and the conversation continues
     or is gracefully terminated.
@@ -186,15 +186,15 @@ def ai_conversation(convo_id: str):
         convo_data['messages'] = []
 
     last_response = f"Let's discuss: {convo_data['topic']}"
-    model_cycle = ["gpt4o", "gemini", "deepseek"] * 3
+    model_cycle = ["Gpt-4.1", "Gemini", "DeepSeek"] * 3
 
     for turn, sender in enumerate(model_cycle):
         try:
-            if sender == "gpt4o":
+            if sender == "Gpt-4.1":
                 reply = call_openai(last_response)
-            elif sender == "gemini":
+            elif sender == "Gemini":
                 reply = call_gemini(last_response)
-            elif sender == "deepseek":
+            elif sender == "DeepSeek":
                 reply = call_deepseek(last_response)
             else:
                 reply = "(Unknown model)"
@@ -206,9 +206,9 @@ def ai_conversation(convo_id: str):
             # Color-coded output
             try:
                 color_map = {
-                    "gpt4o": "\033[91m",    # Red
-                    "gemini": "\033[94m",   # Blue
-                    "deepseek": "\033[95m"  # Purple
+                    "Gpt-4.1": "\033[91m",    # Red
+                    "Gemini": "\033[94m",   # Blue
+                    "DeepSeek": "\033[95m"  # Purple
                 }
                 reset = "\033[0m"
                 color = color_map.get(sender, "")
@@ -295,6 +295,6 @@ def get_convo_log(convo_id: str):
         "convo_id": convo_id,
         "topic": convo_data.get("topic", "Unknown Topic"),
         "formatted": "\n".join(
-            f"{msg['sender'].upper()}: {msg['content']}" for msg in convo_data.get("messages", [])
+            f"{msg['sender']}: {msg['content']}" for msg in convo_data.get("messages", [])
         )
     }
