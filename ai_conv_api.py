@@ -46,7 +46,7 @@ class StartConversationRequest(BaseModel):
     topic: str
 
 class Message(BaseModel):
-    sender: Literal['Gpt41', 'Gemini', 'DeepSeek']
+    sender: Literal['GPT', 'Gemini', 'DeepSeek']
     content: str
 
 class ConversationLog(BaseModel):
@@ -186,18 +186,18 @@ def ai_conversation(convo_id: str):
         convo_data['messages'] = []
 
     last_response = f"Let's discuss: {convo_data['topic']}"
-    model_cycle = ["Gpt41", "Gemini", "DeepSeek"] * 3
+    model_cycle = ["GPT", "Gemini", "DeepSeek"] * 3
 
     for turn, sender in enumerate(model_cycle):
         try:
-            if sender == "Gpt41":
+            if sender == "GPT":
                 reply = call_openai(last_response)
             elif sender == "Gemini":
                 reply = call_gemini(last_response)
             elif sender == "DeepSeek":
                 reply = call_deepseek(last_response)
             else:
-                reply = "(Unknown model)"
+                reply = "(Unknown model)"F
 
             if not reply:
                 print(f"[{convo_id}] Warning: Empty reply from {sender}.")
@@ -206,7 +206,7 @@ def ai_conversation(convo_id: str):
             # Color-coded output
             try:
                 color_map = {
-                    "Gpt41": "\033[91m",    # Red
+                    "GPT": "\033[91m",    # Red
                     "Gemini": "\033[94m",   # Blue
                     "DeepSeek": "\033[95m"  # Purple
                 }
